@@ -94,6 +94,7 @@ class Wage:
         days_in_month = calendar.monthrange(self.year, self.month)[1]
         date = self.payment_date - timedelta(days=days_in_month)
         pre_month_user_info_dict = self.get_user_info(date)  # gets whole dictionary/ is this needed?
+        print(pre_month_user_info_dict)
         previous_gross_wage = GrossWage(
             pre_month_user_info_dict['staff_id'], date, self.payment_type,
             pre_month_user_info_dict['education_level'], pre_month_user_info_dict['seniority'],
@@ -245,12 +246,12 @@ class Wage:
 # payroll = Wage(2, 'premium', datetime(2022, 8, 15).date(), cumulative_tax_base=164216)
 # print(payroll.user_info_dict)
 # print(payroll.payroll_dict)
-# print('*'*50 + '\n' + '*'*50)
-#
-payroll2 = Wage(1, 'wage_disparity', datetime(2022, 7, 5).date(), cumulative_tax_base=120000)
-print(payroll2.user_info_dict)
-print(payroll2.payroll_dict)
+# print('*'*100 + '\n' + '*'*100)
 
-# payroll2 = Wage(3, 'wage', datetime(2022, 9, 15).date())
+# payroll2 = Wage(1, 'wage_disparity', datetime(2022, 7, 5).date(), cumulative_tax_base=120000)
 # print(payroll2.user_info_dict)
 # print(payroll2.payroll_dict)
+
+payroll2 = Wage(3, 'wage', datetime(2022, 1, 15).date(), overtime=10)
+print(payroll2.user_info_dict)
+print(payroll2.payroll_dict)

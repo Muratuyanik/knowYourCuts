@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from get_user_info import UserInfo
 
-ilbank = True
+corporate = True
 my_dict = {}
 
 # my_dict["disability"] = {
