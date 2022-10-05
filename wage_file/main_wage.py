@@ -1,8 +1,8 @@
 import calendar
 from datetime import datetime, timedelta
-from kycDBmanager import AdminDataEntry as Ade
+from admin_data_entry import AdminDataEntry as Ade
 from disability_discount import DisabilityDiscount
-from kycDBmanager import Payroll
+from payroll import Payroll
 from social_security import SocialSecurity
 from tax import Tax
 from wage_file.gross_wage import GrossWage
@@ -252,6 +252,10 @@ class Wage:
 # print(payroll2.user_info_dict)
 # print(payroll2.payroll_dict)
 
-payroll2 = Wage(3, 'wage', datetime(2022, 1, 15).date(), overtime=10)
+payroll2 = Wage(1, 'wage', datetime(2022, 9, 15).date())
 print(payroll2.user_info_dict)
 print(payroll2.payroll_dict)
+
+# payroll3 = Wage(3, 'wage', datetime(2022, 1, 15).date(), overtime=10)
+# print(payroll3.user_info_dict)
+# print(payroll3.payroll_dict)

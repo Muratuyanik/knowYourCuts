@@ -1,5 +1,5 @@
 from datetime import datetime
-from kycDBmanager import AdminDataEntry as Ade
+from admin_data_entry import AdminDataEntry as Ade
 
 
 class Tax:

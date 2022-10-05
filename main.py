@@ -1,16 +1,24 @@
-# This is a sample Python script.
-import pandas
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import dash_bootstrap_components as dbc
+from pages import login_page, admin_page, payroll_page, user_info_page
+from app import app
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+app.layout = dbc.Container([
+    dbc.Tabs([
+        dbc.Tab(children=login_page.login_page, label="Giriş", active_tab_style={"font-weight": "bold"}, id="login-tab",
+                tab_id="login-tab"),
+        dbc.Tab(children=user_info_page.user_info_page, label="Kullanici Bilgileri",
+                active_tab_style={"font-weight": "bold"},
+                id="user-info-tab", tab_id="user-info-tab", disabled=True),
+        dbc.Tab(children=payroll_page.payroll_page, label="Maas Hesapla", active_tab_style={"font-weight": "bold"},
+                id="payroll-tab", tab_id="payroll-tab", disabled=True),
+        dbc.Tab(children=admin_page.admin_data_entry_page, label="Temel Veriler",
+                active_tab_style={"font-weight": "bold"},
+                tab_id="admin-data-entry-tab", id="admin-data-entry-tab", disabled=True),
+        dbc.Tab(label="Çıkış", id="logout-tab", tab_id="logout-tab",
+                tab_style={"marginLeft": "auto", "text-align": "right"}, disabled=True)],
+        id="tabs", active_tab="login-tab")
+])
 
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    app.run_server(debug=True)

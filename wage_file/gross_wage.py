@@ -1,6 +1,6 @@
 import calendar
 
-from my_database.kycDBmanager import AdminDataEntry as Ade
+from my_database.admin_data_entry import AdminDataEntry as Ade
 from datetime import date, timedelta
 import datetime
 

@@ -1,7 +1,7 @@
 import calendar
 from datetime import timedelta
 
-from kycDBmanager import AdminDataEntry as Ade
+from admin_data_entry import AdminDataEntry as Ade
 
 
 class SocialSecurity:

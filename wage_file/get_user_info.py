@@ -1,4 +1,4 @@
-from my_database.kycDBmanager import UsersInfo
+from my_database.user_information import UsersInfo
 from datetime import datetime, timedelta
 
 
