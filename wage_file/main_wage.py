@@ -54,6 +54,7 @@ class Wage:
         self.gross_wage = self.calculate_gross_wage()
         self.wage_calculation()
 
+    # getuser info classinda duzenle
     def get_user_info(self, date):
         active_user = UserInfo(self.user_id, date)
         active_user.payroll_user_info()
