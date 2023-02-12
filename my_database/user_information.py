@@ -75,6 +75,12 @@ class UsersInfo:
             public_service_time=corporate_dict['public_service_time'])
         return staff_id
 
+    def select_user_title(self):
+        sql_query = 'SELECT job_title FROM job_title JT, corporate_staff CS WHERE CS.user_id=%s and JT.title_id = ' \
+                    'CS.title_id '
+        title = self.myDB.select_advanced(sql_query, ('user_id', self.user_id))
+        return title
+
     def select_user_info(self):
         user_dictionary = {}
         table_list = ['dependent_child', 'disability', 'education_level', 'general_user', 'corporate_staff',
