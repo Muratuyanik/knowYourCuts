@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from get_user_info import UserInfo
+from user_info import UserInfo
 
 corporate = True
 my_dict = {}

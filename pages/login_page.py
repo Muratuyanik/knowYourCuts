@@ -64,16 +64,19 @@ def authorization_check(n_clicks, tab, uname, password):
 
         user = users.Users()
         sql_response = user.sign_in(uname, password)
-        permission_level = sql_response[0]
-        user_id = sql_response[1]
-
-        if permission_level == "admin":
-            return False, False, False, False, True, "admin-data-entry-tab", False, user_id
-        elif permission_level == "user":
-            return False, False, False, dash.no_update, True, "user-info-tab", dash.no_update, user_id
+        if sql_response is None:
+            return dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, "login-tab", True, None
         else:
-            return dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
-                   dash.no_update, True, None
+            permission_level = sql_response[0]
+            user_id = sql_response[1]
+
+            if permission_level == "admin":
+                return False, False, False, False, True, "admin-data-entry-tab", False, user_id
+            elif permission_level == "user":
+                return False, False, False, dash.no_update, True, "user-info-tab", dash.no_update, user_id
+            else:
+                return dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, \
+                       dash.no_update, True, None
 
     if ctx.triggered_id == "tabs" and tab == "logout-tab":
         return True, True, True, True, False, "login-tab", False, None

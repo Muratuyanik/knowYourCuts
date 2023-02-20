@@ -11,9 +11,10 @@ class GrossWage:
     take input related to base wage &  related information
     calculate Gross wage and 3 compensation
     """
-    def __init__(self, title_id, payment_date, payment_type, higher_education, seniority, language_level):
+    def __init__(self, title_id, payment_date, payment_type, higher_education, seniority, language_level, wage_compound=1):
         self.payment_date = payment_date
         self.payment_type = payment_type
+        self.wage_compound = wage_compound
         self.base = self.get_base_wage(title_id)
         self.higher_education = higher_education
         self.seniority = seniority
@@ -37,7 +38,13 @@ class GrossWage:
             pre_date = self.payment_date - timedelta(days=days_in_month)
             base_wage = float(admin.select_corporate_wage(title_id, pre_date)[2]) * (44 / 30) * (raise_rate/100)
         else:
-            base_wage = float(admin.select_corporate_wage(title_id, self.payment_date)[2])
+            if self.payment_type == 'wage_disparity':
+                base_wage = float(admin.select_corporate_wage(title_id, self.payment_date)[2])*self.wage_compound
+            else:
+                base_wage = float(admin.select_corporate_wage(title_id, self.payment_date)[2])
+
+        if self.payment_type == 'dividend':
+            base_wage *= self.wage_compound
 
         return base_wage
 

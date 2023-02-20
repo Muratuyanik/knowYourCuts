@@ -7,7 +7,7 @@ class UserInfo:
     Gets&Sets userinfo via kycDBmanager class
     Takes & Returns user dictionaries
     """
-    def __init__(self, user_id, payroll_date):
+    def __init__(self, user_id, payroll_date=datetime.now().date()):
         self.user_id = user_id
         self.payroll_date = payroll_date
         self.user = UsersInfo(self.user_id)
@@ -15,18 +15,22 @@ class UserInfo:
         self.table_list = ['dependent_child', 'disability', 'education_level', 'general_user', 'corporate_staff',
                            'labor_union', 'language', 'partner_working_status', 'private_insurance']
 
-    def set_user_info(self, corporate, user_dict):
+    def set_user_info(self, user_dict, corporate=True):
 
+        response_list = []
         for table in self.table_list:
             if table in user_dict.keys():
                 insert_function = 'insert_' + table
                 if corporate & (table in ('dependent_child', 'disability', 'education_level', 'corporate_staff',
                                           'labor_union', 'language', 'partner_working_status', 'private_insurance')):
-                    getattr(self.user, insert_function)(user_dict[table])
+                    response_id = getattr(self.user, insert_function)(user_dict[table])
+                    response_list.append(response_id)
                 else:
                     if table in ('dependent_child', 'disability', 'education_level', 'general_user',
                                  'partner_working_status', 'private_insurance'):
-                        getattr(self.user, insert_function)(user_dict[table])
+                        response_id = getattr(self.user, insert_function)(user_dict[table])
+                        response_list.append(response_id)
+        return len(response_list)
 
     def update_user_info(self, corporate, user_dict):
 

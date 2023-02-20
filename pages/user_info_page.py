@@ -1,9 +1,10 @@
 from datetime import date, datetime
 import dash
 import dash_bootstrap_components as dbc
-from dash import Dash, html, dcc, Input, Output, State, ctx
+from dash import html, dcc, Input, Output, State, ctx
 from dash.exceptions import PreventUpdate
 from app import app
+from user_info import UserInfo
 from user_information import UsersInfo
 from dash_extensions import BeforeAfter
 
@@ -19,7 +20,7 @@ request_modals = dbc.Modal([
 user_info_button = dbc.Row([
     dbc.Col([
         dbc.Button('Kullanici Bilgileri Getir / Yeni Bilgi Gir', id='show_user_info_button',
-                   style={'background-color': 'rgb(0, 0, 209)'})
+                   style={'background-color': 'rgb(0, 0, 209)'}, color="success")
     ],
         width={'size': 'auto'})
 ], style={'padding-bottom': '50px'}, justify='center')
@@ -27,8 +28,8 @@ user_info_button = dbc.Row([
 request_form = dbc.Form([
     dbc.Row([
         dbc.Col([
-            dbc.Label("Kullanıcı Adı", html_for="request_user", style={"font-weight": "bold"}),
-            dbc.Input(type="text", disabled=True, id="request_user")
+            dbc.Label("Kullanıcı Adı", html_for="active_user", style={"font-weight": "bold"}),
+            dbc.Input(type="text", disabled=True, id="active_user")
         ], width="4"),
         dbc.Col([
             dbc.Label("Tarih", html_for="request_submission_date", style={"font-weight": "bold"}),
@@ -338,25 +339,8 @@ request_form = dbc.Form([
 
     dbc.Row([
         dbc.Col([
-            dbc.Label("Deney Kafilesi", html_for="request_exp_name", style={"font-weight": "bold"}),
-            dbc.Input(type="text", id="request_exp_name"),
-        ]),
-        dbc.Col([
-            dbc.Label("Deney Türü", html_for="request_exp_type", style={"font-weight": "bold"}),
-            dcc.Dropdown(
-                options={
-                    "A": "A Tipi Kültür",
-                    "B": "B Tipi Kültür"
-                }, id="request_exp_type"
-            )
-        ], width={"offset": 3})
-    ], ),
-    html.Hr(),
-
-    dbc.Row([
-        dbc.Col([
             dbc.Label("Calisilan Kurum", html_for="request_submission_date", style={"font-weight": "bold"}),
-            dcc.RadioItems(['ILBANK', 'Diger'], 'Diger', inline=True, id='corporation',
+            dcc.RadioItems(['ILBANK', 'Diger'], 'ILBANK', inline=True, id='corporation',
                            labelStyle={'display': 'block', 'cursor': 'pointer', 'margin-right': '40px'})
         ]),
     ]),
@@ -390,29 +374,93 @@ user_info_page = dbc.Container([
     Output('submission_result', 'data'),
     Input('submit_request', 'n_clicks'),
     Input('close_request_modal', 'n_clicks'),
-    State('request_user', 'value'),
-    State("request_submission_date", 'value'),
-    State("request_exp_name", 'value'),
-    State("request_exp_type", 'value'),
+    State("user-id", "data"),
+    State("corporate_starting_date", "date"),
+    State("experience_before", "value"),
+    State("job_title", "value"),
+    State("education_level", "value"),
+    State("graduation_date", "date"),
+    State("marriage", "value"),
+    State("partner", "value"),
+    State("partner_working_start_date", "date"),
+    State("partner_working_end_date", "date"),
+    State("dependent_children", "value"),
+    State("child_one_gender", "value"),
+    State("child_one_birth_date", "date"),
+    State("child_one_dependent", "value"),
+    State("child_one_disability", "value"),
+    State("child_two_gender", "value"),
+    State("child_two_birth_date", "date"),
+    State("child_two_dependent", "value"),
+    State("child_two_disability", "value"),
+    State("child_three_gender", "value"),
+    State("child_three_birth_date", "date"),
+    State("child_three_dependent", "value"),
+    State("child_three_disability", "value"),
+    State("disability_level", "value"),
+    State("disability_start_date", "date"),
+    State("disability_end_date", "date"),
+    State("private_insurance", "value"),
+    State("insurance_date", "date"),
+    State("total_insurance", "value"),
+    State("union_membership", "value"),
+    State("union_start_date", "date"),
+    State("union_end_date", "date"),
+    State("language", "value"),
+    State("exam_date", "date"),
+    State("exam_score", "value"),
     prevent_initial_call=True
 )
-def talebiIsle(sub_click, modal_click, uname, sub_date, exp_name, exp_type):
+def insert_user_inf(sub_click, modal_click, user_id, c_start, experience, title, edu_level, gra_date, marriage, partner,
+                    p_start, p_end, d_children, gender1, birth_date1, dependent1, disability1, gender2, birth_date2,
+                    dependent2, disability2, gender3, birth_date3, dependent3, disability3, disability_level, d_start,
+                    d_end, private_ins, ins_date, ins_total, union, u_start, u_end, language, e_date, score):
     if ctx.triggered_id == 'close_request_modal':
         return False, dash.no_update, dash.no_update, dash.no_update
 
-    data_dict = {'kullaniciAdi': uname,
-                 'talepTarihi': sub_date,
-                 'deneyKafilesi': exp_name,
-                 'deneyTipi': exp_type}
+    data_dict = {"education_level": {"graduation_date": gra_date,
+                                     "level": edu_level},
+                 "corporate_staff": {"title": title,
+                                     "start_date": c_start,
+                                     "public_service_time": experience},
+                 }
+    if disability_level != "Yok":
+        data_dict["disability"] = {"start_date": d_start,
+                                   "end_date": d_end,
+                                   "level": disability_level}
+    if marriage == "Evli":
+        data_dict["partner_working_status"] = {"start_date": p_start,
+                                               "end_date": p_end,
+                                               "status": partner}
+    if d_children != "Yok":
+        if int(d_children) >= 1:
+            data_dict["dependent_child"] = {"birth_date": birth_date1,
+                                            "gender": gender1,
+                                            "status": dependent1,
+                                            "disability": disability1}
+        if int(d_children) >= 2:
+            pass
 
-    if None in data_dict.values() or '' in data_dict.values():
+    print(data_dict)
+
+    if union == "Evet":
+        data_dict["labor_union"] = {"start_date": u_start,
+                                    "end_date": u_end}
+
+    if private_ins == "Var":
+        data_dict["private_insurance"] = {"insurance_date": ins_date,
+                                          "total_insurance_payment": ins_total}
+    if language == "Var":
+        data_dict["language"] = {"exam_date": e_date,
+                                 "score": score}
+
+    if None in data_dict.values() or '' in data_dict.values() or c_start is None:
         raise PreventUpdate
 
-    sql_response, request_ID = labDBmanager.obje1.deney_talebi_isle(data_dict['kullaniciAdi'],
-                                                                    data_dict['deneyTipi'],
-                                                                    data_dict['deneyKafilesi'],
-                                                                    data_dict['talepTarihi'])
-
+    user = UserInfo(user_id)
+    sql_response = user.set_user_info(data_dict)
+    print(data_dict)
+    print(sql_response)
     if sql_response:
         modal_shown = True
         modal_title = 'Bilgileriniz kaydedilmistir.'
@@ -428,11 +476,11 @@ def talebiIsle(sub_click, modal_click, uname, sub_date, exp_name, exp_type):
 
 
 @app.callback(
-    Output("request_user", "value"),
+    Output("active_user", "value"),
     Input("login-control-button", "n_clicks"),
     State("username-box", "value")
 )
-def userName(log_click, uname):
+def user_name(log_click, uname):
     if log_click is None:
         raise PreventUpdate
     else:
@@ -486,10 +534,9 @@ def show_user_form(log_click, user_id):
     else:
         user = UsersInfo(user_id)
         user_dict = user.select_user_info()
-        print(user_dict)
         if not user_dict['corporate_staff']:
             return style, None, 0, None, None, datetime.now().date(), "Bekar", None, None, None, "Yok", None, None, \
-                   None, None, None, None, None, None, None, None, None, None, "Yok", None, None, "Yok", None, None,\
+                   None, None, None, None, None, None, None, None, None, None, "Yok", None, None, "Yok", None, None, \
                    "Hayir", None, None, "Yok", None, None
         else:
             if not user_dict['partner_working_status']:
@@ -515,8 +562,6 @@ def show_user_form(log_click, user_id):
                                                             user_dict['dependent_child'][0][2], \
                                                             user_dict['dependent_child'][0][4], \
                                                             user_dict['dependent_child'][0][5]
-                    gender2, birth2, status2, disability2 = None, None, None, None
-                    gender3, birth3, status3, disability3 = None, None, None, None
                 if number_of_child >= 2:
                     gender2, birth2, status2, disability2 = user_dict['dependent_child'][1][3], \
                                                             user_dict['dependent_child'][1][2], \

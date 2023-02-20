@@ -33,4 +33,4 @@ def calculate_min_wage_discount(period, min_wage):
             admin.update_min_wage_discount(year, count, discount, cumulative_discount_base, min_wage_stump_duty)
 
 
-calculate_min_wage_discount(datetime(2022, 7, 1).date(), 6471)
+calculate_min_wage_discount(datetime(2023, 1, 1).date(), 10008)

@@ -1,12 +1,15 @@
 import calendar
 from datetime import datetime, timedelta
+
+import pandas as pd
+
 from admin_data_entry import AdminDataEntry as Ade
 from disability_discount import DisabilityDiscount
 from payroll import Payroll
 from social_security import SocialSecurity
 from tax import Tax
 from wage_file.gross_wage import GrossWage
-from get_user_info import UserInfo
+from user_info import UserInfo
 
 '''
 this class needed?
@@ -41,10 +44,11 @@ class Wage:
     finally gives net income & and all details of wage payroll.
     Calculates only one payment at a time.
     """
-    def __init__(self, user_id, payment_type, payment_date, overtime=0, cumulative_tax_base=0):
+    def __init__(self, user_id, payment_type, payment_date, wage_compound, overtime=0, cumulative_tax_base=0):
         self.user_id = user_id
         self.payment_type = payment_type
         self.payment_date = payment_date
+        self.wage_compound = wage_compound
         self.month = self.payment_date.month
         self.year = self.payment_date.year
         self.overtime = overtime
@@ -88,7 +92,7 @@ class Wage:
         overtime_base = self.previous_gross_wage()
         overtime_payment = (self.overtime * overtime_base) / 120
         print(overtime_payment)
-        self.payroll_dict['overtime_pay'] = overtime_payment
+        self.payroll_dict['overtime_pay'] = round(overtime_payment, 2)
         return overtime_payment
 
     def previous_gross_wage(self):
@@ -109,27 +113,28 @@ class Wage:
             # for other than corporate users
             # this part not written or tested properly right now
             gross_wage = self.user_info_dict['general_user']
-            self.payroll_dict['gross_wage'] = gross_wage
-            self.payroll_dict['base_wage'] = self.user_info_dict['base']
+            self.payroll_dict['gross_wage'] = round(gross_wage, 2)
+            self.payroll_dict['base_wage'] = round(self.user_info_dict['base'], 2)
         return gross_wage
 
     def corporation_gross_wage(self):
         gross = GrossWage(
             self.user_info_dict['staff_id'], self.payment_date, self.payment_type,
             self.user_info_dict['education_level'], self.user_info_dict['seniority'],
-            self.user_info_dict['language'] if 'language' in self.user_info_dict.keys() else 0)
+            self.user_info_dict['language'] if 'language' in self.user_info_dict.keys() else 0,
+            self.wage_compound)
 
         gross_wage = gross.gross_wage
         if self.payment_type == 'wage':    # if not overtime & overtime payment will be none!
             gross_wage += self.overtime_payment()
-        # else:
-        #     self.payroll_dict['overtime_pay'] = 0
-        #     self.payroll_dict['overtime'] = self.overtime   # when else written this part should be written before if
+        else:
+            self.payroll_dict['overtime_pay'] = 0
+            self.payroll_dict['overtime'] = self.overtime
         self.payroll_dict['base_wage'] = gross.base
-        self.payroll_dict['gross_wage'] = gross_wage
-        self.payroll_dict['higher_education_compensation'] = gross.high_edu_compensation
-        self.payroll_dict['seniority_bonus'] = gross.year_of_work_bonus
-        self.payroll_dict['language_compensation'] = gross.language_compensation
+        self.payroll_dict['gross_wage'] = round(gross_wage, 2)
+        self.payroll_dict['higher_education_compensation'] = round(gross.high_edu_compensation, 2)
+        self.payroll_dict['seniority_bonus'] = round(gross.year_of_work_bonus, 2)
+        self.payroll_dict['language_compensation'] = round(gross.language_compensation, 2)
         return gross_wage
 
     def general_user_gross_wage(self):
@@ -152,7 +157,7 @@ class Wage:
             child_support = float(compound) * self.user_info_dict['dependent_child_compound'] * 250
             family_support += child_support
 
-        self.payroll_dict['family_support'] = family_support
+        self.payroll_dict['family_support'] = round(family_support, 2)
 
     def insurance(self):
         insurance_turnover = Payroll(self.user_id).select_insurance_turnover(self.payment_date)
@@ -169,21 +174,21 @@ class Wage:
             sgk = SocialSecurity(self.gross_wage, float(insurance_turnover))
         else:
             sgk = SocialSecurity(self.gross_wage)
-        self.payroll_dict['insurance_premium'] = sgk.insurance()
-        self.payroll_dict['unemployment_premium'] = sgk.unemployment()
+        self.payroll_dict['insurance_premium'] = round(sgk.insurance(), 2)
+        self.payroll_dict['unemployment_premium'] = round(sgk.unemployment(), 2)
         self.payroll_dict['ins_pre_turnover'] = sgk.insurance_turnover(self.payment_date, ins_turnover_base)
 
     def stamp_duty(self):
         stamp_tax = self.gross_wage * .00759
         if self.payment_type == 'wage':
             stamp_tax -= float(Ade().select_min_wage_discount(self.year, self.month)[2])
-        self.payroll_dict['stamp_duty'] = stamp_tax
+        self.payroll_dict['stamp_duty'] = round(stamp_tax, 2)
 
     def private_insurance(self):
         private_insurance = 0
         if 'private_insurance' in self.user_info_dict.keys():
             private_insurance = self.user_info_dict['private_insurance']
-        self.payroll_dict['private_insurance'] = private_insurance
+        self.payroll_dict['private_insurance'] = round(private_insurance, 2)
 
     def union_due(self):
         union_discount = 0
@@ -205,18 +210,18 @@ class Wage:
         if 'disability' in self.user_info_dict.keys():
             disability_discount = DisabilityDiscount(self.user_info_dict['disability'],
                                                      self.payment_date).get_disability_discount()
-        self.payroll_dict['disability_discount'] = disability_discount
+        self.payroll_dict['disability_discount'] = round(disability_discount, 2)
 
     def tax_discount(self):
 
         tax_discount = self.payroll_dict['insurance_premium'] + self.payroll_dict['unemployment_premium'] + \
                        self.payroll_dict['disability_discount'] + self.payroll_dict['union_discount'] + \
                        self.payroll_dict['private_insurance']
-        self.payroll_dict['total_tax_discount'] = tax_discount
+        self.payroll_dict['total_tax_discount'] = round(tax_discount, 2)
 
     def tax_base(self):
         tax_base = self.gross_wage - self.payroll_dict['total_tax_discount']
-        self.payroll_dict['income_tax_base'] = tax_base
+        self.payroll_dict['income_tax_base'] = round(tax_base, 2)
 
     def calculate_cumulative_tax_base(self, cumulative):
         previous_cumulative = Payroll(self.user_id).select_cumulative_tax_base(self.payment_date)
@@ -228,20 +233,20 @@ class Wage:
 
     def tax(self):
         tax_object = Tax(self.payroll_dict['income_tax_base'], self.cumulative_tax_base, self.year)
-        self.payroll_dict['cumulative_tax_base'] = tax_object.cumulative_tax_base
-        self.payroll_dict['income_tax'] = tax_object.calculated_tax
-        self.payroll_dict['tax_to_pay'] = self.payroll_dict['income_tax'] - self.payroll_dict['minimum_wage_discount']
+        self.payroll_dict['cumulative_tax_base'] = round(tax_object.cumulative_tax_base, 2)
+        self.payroll_dict['income_tax'] = round(tax_object.calculated_tax, 2)
+        self.payroll_dict['tax_to_pay'] = round(self.payroll_dict['income_tax'] - self.payroll_dict['minimum_wage_discount'], 2)
 
     def minimum_wage_discount(self):
         min_wage_discount = float(Ade().select_min_wage_discount(self.year, self.month)[0])
-        self.payroll_dict['minimum_wage_discount'] = min_wage_discount
+        self.payroll_dict['minimum_wage_discount'] = round(min_wage_discount, 2)
 
     def net_income(self):
         total_legal_cuts = self.payroll_dict['insurance_premium'] + self.payroll_dict['unemployment_premium'] \
                            + self.payroll_dict['tax_to_pay'] + self.payroll_dict['stamp_duty']
-        self.payroll_dict['total_legal_cuts'] = total_legal_cuts
+        self.payroll_dict['total_legal_cuts'] = round(total_legal_cuts, 2)
         net_income = self.payroll_dict['gross_wage'] - total_legal_cuts + self.payroll_dict['family_support']
-        self.payroll_dict['net_income'] = net_income
+        self.payroll_dict['net_income'] = round(net_income, 2)
 
 
 # payroll = Wage(2, 'premium', datetime(2022, 8, 15).date(), cumulative_tax_base=164216)
@@ -253,9 +258,11 @@ class Wage:
 # print(payroll2.user_info_dict)
 # print(payroll2.payroll_dict)
 
-payroll2 = Wage(1, 'wage', datetime(2022, 9, 15).date())
-print(payroll2.user_info_dict)
-print(payroll2.payroll_dict)
+# payroll2 = Wage(1, 'wage', datetime(2022, 9, 15).date(),1)
+# print(payroll2.user_info_dict)
+# print(payroll2.payroll_dict)
+# df = pd.DataFrame(payroll2.payroll_dict, index={payroll2.payroll_dict['payment_type']})
+# print(df)
 
 # payroll3 = Wage(3, 'wage', datetime(2022, 1, 15).date(), overtime=10)
 # print(payroll3.user_info_dict)
