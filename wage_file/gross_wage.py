@@ -38,10 +38,7 @@ class GrossWage:
             pre_date = self.payment_date - timedelta(days=days_in_month)
             base_wage = float(admin.select_corporate_wage(title_id, pre_date)[2]) * (44 / 30) * (raise_rate/100)
         else:
-            if self.payment_type == 'wage_disparity':
-                base_wage = float(admin.select_corporate_wage(title_id, self.payment_date)[2])*self.wage_compound
-            else:
-                base_wage = float(admin.select_corporate_wage(title_id, self.payment_date)[2])
+            base_wage = float(admin.select_corporate_wage(title_id, self.payment_date)[2])
 
         if self.payment_type == 'dividend':
             base_wage *= self.wage_compound

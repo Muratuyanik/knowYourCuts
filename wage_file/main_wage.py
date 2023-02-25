@@ -69,7 +69,6 @@ class Wage:
         self.payroll_dict["payment_type"] = self.payment_type
         self.payroll_dict["pay_period"] = self.payment_date
         self.insurance()
-        self.stamp_duty()
         if self.payment_type == 'wage':  # these discounts&bonus only takes place in 'wage' not other types of payments
             self.union_due()
             self.disability_discount()
@@ -85,6 +84,7 @@ class Wage:
         self.tax_discount()
         self.tax_base()
         self.tax()
+        self.stamp_duty()
         self.net_income()
 
     def overtime_payment(self):
@@ -172,14 +172,16 @@ class Wage:
 
         if insurance_turnover:
             sgk = SocialSecurity(self.gross_wage, float(insurance_turnover))
+            self.payroll_dict['insurance_balance'] = float(insurance_turnover)
         else:
             sgk = SocialSecurity(self.gross_wage)
+            self.payroll_dict['insurance_balance'] = 0
         self.payroll_dict['insurance_premium'] = round(sgk.insurance(), 2)
         self.payroll_dict['unemployment_premium'] = round(sgk.unemployment(), 2)
         self.payroll_dict['ins_pre_turnover'] = sgk.insurance_turnover(self.payment_date, ins_turnover_base)
 
     def stamp_duty(self):
-        stamp_tax = self.gross_wage * .00759
+        stamp_tax = (self.gross_wage + self.payroll_dict['union_bonus']) * .00759
         if self.payment_type == 'wage':
             stamp_tax -= float(Ade().select_min_wage_discount(self.year, self.month)[2])
         self.payroll_dict['stamp_duty'] = round(stamp_tax, 2)
@@ -245,7 +247,8 @@ class Wage:
         total_legal_cuts = self.payroll_dict['insurance_premium'] + self.payroll_dict['unemployment_premium'] \
                            + self.payroll_dict['tax_to_pay'] + self.payroll_dict['stamp_duty']
         self.payroll_dict['total_legal_cuts'] = round(total_legal_cuts, 2)
-        net_income = self.payroll_dict['gross_wage'] - total_legal_cuts + self.payroll_dict['family_support']
+        net_income = self.payroll_dict['gross_wage'] - total_legal_cuts + self.payroll_dict['family_support']\
+                     + self.payroll_dict['union_bonus']
         self.payroll_dict['net_income'] = round(net_income, 2)
 
 

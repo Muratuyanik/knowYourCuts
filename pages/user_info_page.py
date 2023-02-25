@@ -52,7 +52,7 @@ request_form = dbc.Form([
         ], width="4"),
         dbc.Col([
             dbc.Label("Daha Once Calisilan Sure(gun): ", html_for="experience_before", style={"font-weight": "bold"}),
-            dbc.Input(type="number", value=0, min=0, step=1, style={'text-align': 'right'}, id="experience_before"),
+            dbc.Input(type="number", value=0, step=1, style={'text-align': 'right'}, id="experience_before"),
         ], width={"offset": 2, "size": 3}),
     ], ),
     html.Hr(),
