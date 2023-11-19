@@ -19,7 +19,7 @@ request_modals = dbc.Modal([
 
 user_info_button = dbc.Row([
     dbc.Col([
-        dbc.Button('Kullanici Bilgileri Getir / Yeni Bilgi Gir', id='show_user_info_button',
+        dbc.Button('Get User Data / Fill Your Data', id='show_user_info_button',
                    style={'background-color': 'rgb(0, 0, 209)'}, color="success")
     ],
         width={'size': 'auto'})
@@ -28,11 +28,11 @@ user_info_button = dbc.Row([
 request_form = dbc.Form([
     dbc.Row([
         dbc.Col([
-            dbc.Label("Kullanıcı Adı", html_for="active_user", style={"font-weight": "bold"}),
+            dbc.Label("User Name", html_for="active_user", style={"font-weight": "bold"}),
             dbc.Input(type="text", disabled=True, id="active_user")
         ], width="4"),
         dbc.Col([
-            dbc.Label("Tarih", html_for="request_submission_date", style={"font-weight": "bold"}),
+            dbc.Label("Date", html_for="request_submission_date", style={"font-weight": "bold"}),
             dbc.Input(type="date", disabled=True, value=date.today(), id="request_submission_date")
         ], width={"offset": 2, "size": 2})
     ], style={'padding-top': '10px'}),
@@ -40,7 +40,7 @@ request_form = dbc.Form([
 
     dbc.Row([
         dbc.Col([
-            dbc.Label("Kurumda Ise Baslama Tarihi: ", html_for="corporate_starting_date",
+            dbc.Label("Corporate Starting Date: ", html_for="corporate_starting_date",
                       style={"font-weight": "bold"}),
             dcc.DatePickerSingle(
                 id='corporate_starting_date',
@@ -48,10 +48,10 @@ request_form = dbc.Form([
                 max_date_allowed=date(2050, 9, 19),
                 initial_visible_month=datetime.now().date(),
                 clearable=True,
-                placeholder="Baslama Tarihi", )
+                placeholder="Starting Date", )
         ], width="4"),
         dbc.Col([
-            dbc.Label("Daha Once Calisilan Sure(gun): ", html_for="experience_before", style={"font-weight": "bold"}),
+            dbc.Label("Experience Before This Corporate (as day): ", html_for="experience_before", style={"font-weight": "bold"}),
             dbc.Input(type="number", value=0, step=1, style={'text-align': 'right'}, id="experience_before"),
         ], width={"offset": 2, "size": 3}),
     ], ),
@@ -59,13 +59,13 @@ request_form = dbc.Form([
 
     dbc.Row([
         dbc.Col([
-            dbc.Label("Unvan", html_for="job_title", style={"font-weight": "bold"}),
+            dbc.Label("Title", html_for="job_title", style={"font-weight": "bold"}),
             dcc.Dropdown(
                 options={
-                    "Expert": "Uzman",
-                    "Technical Expert": "Teknik Uzman",
-                    "Management Staff": "Yonetim Personeli",
-                    "Engineer": "Muhendis"
+                    "Expert": "Expert",
+                    "Technical Expert": "Technical Expert",
+                    "Management Staff": "Management Staff",
+                    "Engineer": "Engineer"
                 }, value="Yok", id="job_title"
             )
         ], width="4"),
@@ -74,19 +74,19 @@ request_form = dbc.Form([
 
     dbc.Row([
         dbc.Col([
-            dbc.Label("Egitim Durumu", html_for="education_level", style={"font-weight": "bold"}),
+            dbc.Label("Last Education Level", html_for="education_level", style={"font-weight": "bold"}),
             dcc.Dropdown(
                 options={
-                    "High School": "Lise",
-                    "Associate": "On Lisans",
-                    "Bachelor": "Lisans",
-                    "Master": "Yuksek Lisans",
-                    "PHD": "Doktora"
+                    "High School": "High School",
+                    "Associate": "Associate",
+                    "Bachelor": "Bachelor",
+                    "Master": "Master/MBA",
+                    "PHD": "PHD"
                 }, value="Yok", id="education_level"
             )
         ], width="4"),
         dbc.Col([
-            dbc.Label("Mezuniyet Tarihi: ", html_for="graduation_date", style={"font-weight": "bold"}),
+            dbc.Label("Graduation Date: ", html_for="graduation_date", style={"font-weight": "bold"}),
             dcc.DatePickerSingle(
                 id='graduation_date',
                 min_date_allowed=date(1995, 8, 5),
@@ -100,19 +100,19 @@ request_form = dbc.Form([
 
     dbc.Row([
         dbc.Col([
-            dbc.Label("Medeni Hal", html_for="marriage", style={"font-weight": "bold"}),
-            dcc.RadioItems(['Evli', 'Bekar'], 'Bekar', inline=True, id='marriage',
+            dbc.Label("Marital Status", html_for="marriage", style={"font-weight": "bold"}),
+            dcc.RadioItems(['Married', 'Single'], 'Single', inline=True, id='marriage',
                            labelStyle={'display': 'block', 'cursor': 'pointer', 'margin-right': '40px'})
         ], width="4"),
     ], ),
     dbc.Row([
         dbc.Col([
-            dbc.Label("Esin Calisma Durumu", html_for="partner", style={"font-weight": "bold"}),
-            dcc.RadioItems(['Calismiyor', 'Calisiyor'], 'Calismiyor', inline=True, id='partner',
+            dbc.Label("Spouse Working Status", html_for="partner", style={"font-weight": "bold"}),
+            dcc.RadioItems(['Not Working', 'Working'], 'Not Working', inline=True, id='partner',
                            labelStyle={'display': 'block', 'cursor': 'pointer', 'margin-right': '40px'})
         ], width='4'),
         dbc.Col([
-            dbc.Label("Baslangic Tarihi: ", html_for="partner_working_start_date", style={"font-weight": "bold"}),
+            dbc.Label("Starting Date: ", html_for="partner_working_start_date", style={"font-weight": "bold"}),
             dcc.DatePickerSingle(
                 id='partner_working_start_date',
                 min_date_allowed=date(1995, 8, 5),
@@ -122,33 +122,33 @@ request_form = dbc.Form([
                 date=datetime.now().date(), )
         ], width={"offset": 2}),
         dbc.Col([
-            dbc.Label("Bitis Tarihi: ", html_for="partner_working_end_date", style={"font-weight": "bold"}),
+            dbc.Label("End Date: ", html_for="partner_working_end_date", style={"font-weight": "bold"}),
             dcc.DatePickerSingle(
                 id='partner_working_end_date',
                 min_date_allowed=date(1995, 8, 5),
                 max_date_allowed=date(2050, 9, 19),
                 initial_visible_month=datetime.now().date(),
                 clearable=True,
-                placeholder="Suresiz", )
+                placeholder="Indefinite", )
         ], width={"offset": 0})
     ], style={'padding-top': '0px', 'display': 'flex'}, justify='evenly', align='center', id='partner_status'),
     html.Hr(),
 
     dbc.Row([
         dbc.Col([
-            dbc.Label("Cocuk Sayisi", html_for="dependent_children", style={"font-weight": "bold"}),
-            dcc.RadioItems(['Yok', '1', '2', '3'], 'Yok', inline=True, id='dependent_children',
+            dbc.Label("Number of Child", html_for="dependent_children", style={"font-weight": "bold"}),
+            dcc.RadioItems(['None', '1', '2', '3'], 'None', inline=True, id='dependent_children',
                            labelStyle={'display': 'block', 'cursor': 'pointer', 'margin-right': '40px'})
         ], width="4"),
     ], ),
     dbc.Row([
         dbc.Col([
-            dbc.Label("1. Cocuk Cinsiyeti", html_for="child_one_gender", style={"font-weight": "bold"}),
+            dbc.Label("1. Child Gender", html_for="child_one_gender", style={"font-weight": "bold"}),
             dcc.RadioItems(['Male', 'Female'], 'Female', inline=True, id='child_one_gender',
                            labelStyle={'display': 'block', 'cursor': 'pointer', 'margin-right': '40px'})
         ], width='3'),
         dbc.Col([
-            dbc.Label("Dogum tarihi Tarihi: ", html_for="child_one_birth_date", style={"font-weight": "bold"}),
+            dbc.Label("Birth Date: ", html_for="child_one_birth_date", style={"font-weight": "bold"}),
             dcc.DatePickerSingle(
                 id='child_one_birth_date',
                 min_date_allowed=date(1995, 8, 5),
@@ -158,24 +158,24 @@ request_form = dbc.Form([
                 date=datetime.now().date(), )
         ], width=3),
         dbc.Col([
-            dbc.Label("Bagimli mi", html_for="child_one_dependent", style={"font-weight": "bold"}),
+            dbc.Label("Dependent Status", html_for="child_one_dependent", style={"font-weight": "bold"}),
             dcc.RadioItems(['Dependent', 'Not'], 'dependent', inline=True, id='child_one_dependent',
                            labelStyle={'display': 'block', 'cursor': 'pointer', 'margin-right': '40px'})
         ], width='3'),
         dbc.Col([
-            dbc.Label("Engel Durumu", html_for="child_one_disability", style={"font-weight": "bold"}),
+            dbc.Label("Disability Status", html_for="child_one_disability", style={"font-weight": "bold"}),
             dcc.RadioItems(['Yes', 'No'], 'No', inline=True, id='child_one_disability',
                            labelStyle={'display': 'block', 'cursor': 'pointer', 'margin-right': '40px'})
         ], width='3'),
     ], style={'padding-top': '30px', 'display': 'flex'}, justify='evenly', align='center', id='child_one_status'),
     dbc.Row([
         dbc.Col([
-            dbc.Label("2. Cocuk Cinsiyeti", html_for="child_two_gender", style={"font-weight": "bold"}),
+            dbc.Label("2. Child Gender", html_for="child_two_gender", style={"font-weight": "bold"}),
             dcc.RadioItems(['Male', 'Female'], 'Male', inline=True, id='child_two_gender',
                            labelStyle={'display': 'block', 'cursor': 'pointer', 'margin-right': '40px'})
         ], width='3'),
         dbc.Col([
-            dbc.Label("Dogum tarihi Tarihi: ", html_for="child_two_birth_date", style={"font-weight": "bold"}),
+            dbc.Label("Birth Date: ", html_for="child_two_birth_date", style={"font-weight": "bold"}),
             dcc.DatePickerSingle(
                 id='child_two_birth_date',
                 min_date_allowed=date(1995, 8, 5),
@@ -185,24 +185,24 @@ request_form = dbc.Form([
                 date=datetime.now().date(), )
         ], width=3),
         dbc.Col([
-            dbc.Label("Bagimli mi", html_for="child_two_dependent", style={"font-weight": "bold"}),
+            dbc.Label("Dependent Status", html_for="child_two_dependent", style={"font-weight": "bold"}),
             dcc.RadioItems(['Dependent', 'Not'], 'Dependent', inline=True, id='child_two_dependent',
                            labelStyle={'display': 'block', 'cursor': 'pointer', 'margin-right': '40px'})
         ], width='3'),
         dbc.Col([
-            dbc.Label("Engel Durumu", html_for="child_two_disability", style={"font-weight": "bold"}),
+            dbc.Label("Disability Status", html_for="child_two_disability", style={"font-weight": "bold"}),
             dcc.RadioItems(['Yes', 'No'], 'No', inline=True, id='child_two_disability',
                            labelStyle={'display': 'block', 'cursor': 'pointer', 'margin-right': '40px'})
         ], width='3'),
     ], style={'padding-top': '30px', 'display': 'flex'}, justify='evenly', align='center', id='child_two_status'),
     dbc.Row([
         dbc.Col([
-            dbc.Label("3. Cocuk Cinsiyeti", html_for="child_three_gender", style={"font-weight": "bold"}),
+            dbc.Label("3. Child Gender", html_for="child_three_gender", style={"font-weight": "bold"}),
             dcc.RadioItems(['Male', 'Female'], 'Female', inline=True, id='child_three_gender',
                            labelStyle={'display': 'block', 'cursor': 'pointer', 'margin-right': '40px'})
         ], width='3'),
         dbc.Col([
-            dbc.Label("Dogum tarihi Tarihi: ", html_for="child_three_birth_date", style={"font-weight": "bold"}),
+            dbc.Label("Birth Date: ", html_for="child_three_birth_date", style={"font-weight": "bold"}),
             dcc.DatePickerSingle(
                 id='child_three_birth_date',
                 min_date_allowed=date(1995, 8, 5),
@@ -212,12 +212,12 @@ request_form = dbc.Form([
                 date=datetime.now().date(), )
         ], width=3),
         dbc.Col([
-            dbc.Label("Bagimli mi", html_for="child_three_dependent", style={"font-weight": "bold"}),
+            dbc.Label("Dependent Status", html_for="child_three_dependent", style={"font-weight": "bold"}),
             dcc.RadioItems(['Dependent', 'Not'], 'Dependent', inline=True, id='child_three_dependent',
                            labelStyle={'display': 'block', 'cursor': 'pointer', 'margin-right': '40px'})
         ], width='3'),
         dbc.Col([
-            dbc.Label("Engel Durumu", html_for="child_three_disability", style={"font-weight": "bold"}),
+            dbc.Label("Disability Status", html_for="child_three_disability", style={"font-weight": "bold"}),
             dcc.RadioItems(['Yes', 'No'], 'No', inline=True, id='child_three_disability',
                            labelStyle={'display': 'block', 'cursor': 'pointer', 'margin-right': '40px'})
         ], width='3'),
@@ -226,18 +226,18 @@ request_form = dbc.Form([
 
     dbc.Row([
         dbc.Col([
-            dbc.Label("Engel Durumu", html_for="disability_level", style={"font-weight": "bold"}),
+            dbc.Label("Disability Status", html_for="disability_level", style={"font-weight": "bold"}),
             dcc.Dropdown(
                 options={
-                    "Yok": "Engel Durumu Bulunmuyor",
-                    "1": "Birinci Derece(%80+)",
-                    "2": "Ikinci Derece(%60-79)",
-                    "3": "Ucuncu Derece(%40-59)"
-                }, value="Yok", id="disability_level"
+                    "None": "No Disability",
+                    "1": "First Degree(%80+)",
+                    "2": "Second Degree(%60-79)",
+                    "3": "Third Degree(%40-59)"
+                }, value="None", id="disability_level"
             )
         ], width="4"),
         dbc.Col([
-            dbc.Label("Baslangic Tarihi: ", html_for="disability_start_date", style={"font-weight": "bold"}),
+            dbc.Label("Start Date: ", html_for="disability_start_date", style={"font-weight": "bold"}),
             dcc.DatePickerSingle(
                 id='disability_start_date',
                 min_date_allowed=date(1995, 8, 5),
@@ -247,37 +247,37 @@ request_form = dbc.Form([
                 date=datetime.now().date(), )
         ], width={"offset": 2}, id='dis_start'),
         dbc.Col([
-            dbc.Label("Bitis Tarihi: ", html_for="disability_end_date", style={"font-weight": "bold"}),
+            dbc.Label("End Date: ", html_for="disability_end_date", style={"font-weight": "bold"}),
             dcc.DatePickerSingle(
                 id='disability_end_date',
                 min_date_allowed=date(1995, 8, 5),
                 max_date_allowed=date(2050, 9, 19),
                 initial_visible_month=datetime.now().date(),
                 clearable=True,
-                placeholder="Suresiz", )
+                placeholder="Indefinite", )
         ], width={"offset": 0}, id='dis_end')
     ], ),
     html.Hr(),
 
     dbc.Row([
         dbc.Col([
-            dbc.Label("Ozel Saglik Sigortasi", html_for="private_insurance", style={"font-weight": "bold"}),
-            dcc.RadioItems(['Var', 'Yok'], 'Yok', inline=True, id='private_insurance',
+            dbc.Label("Private Health Ins", html_for="private_insurance", style={"font-weight": "bold"}),
+            dcc.RadioItems(['Yes', 'No'], 'No', inline=True, id='private_insurance',
                            labelStyle={'display': 'block', 'cursor': 'pointer', 'margin-right': '40px'})
         ], width='4'),
         dbc.Col([
-            dbc.Label("Sigorta Tarihi: ", html_for="insurance_date", style={"font-weight": "bold"}),
+            dbc.Label("Ins Start Date: ", html_for="insurance_date", style={"font-weight": "bold"}),
             dcc.DatePickerSingle(
                 id='insurance_date',
                 min_date_allowed=date(1995, 8, 5),
                 max_date_allowed=date(2050, 9, 19),
                 initial_visible_month=datetime.now().date(),
                 clearable=True,
-                placeholder="Sigorta Tarihi",
+                placeholder="Ins Start Date",
                 date=datetime.now().date(), )
         ], width={"offset": 2}, id='ins_date'),
         dbc.Col([
-            dbc.Label("Toplam Sigorta Tutari: ", html_for="total_insurance", style={"font-weight": "bold"}),
+            dbc.Label("Total Insurance Amount: ", html_for="total_insurance", style={"font-weight": "bold"}),
             dbc.Input(type="number", value=0, min=0, step=0.01, style={'text-align': 'right'}, id="total_insurance"),
         ], id="total_cost"),
     ]),
@@ -285,12 +285,12 @@ request_form = dbc.Form([
 
     dbc.Row([
         dbc.Col([
-            dbc.Label("Sendika Uyeligi", html_for="union_membership", style={"font-weight": "bold"}),
-            dcc.RadioItems(['Evet', 'Hayir'], 'Hayir', inline=True, id='union_membership',
+            dbc.Label("Union Membership", html_for="union_membership", style={"font-weight": "bold"}),
+            dcc.RadioItems(['Yes', 'No'], 'No', inline=True, id='union_membership',
                            labelStyle={'display': 'block', 'cursor': 'pointer', 'margin-right': '40px'})
         ], width='4'),
         dbc.Col([
-            dbc.Label("Baslangic Tarihi: ", html_for="union_start_date", style={"font-weight": "bold"}),
+            dbc.Label("Start Date: ", html_for="union_start_date", style={"font-weight": "bold"}),
             dcc.DatePickerSingle(
                 id='union_start_date',
                 min_date_allowed=date(1995, 8, 5),
@@ -300,37 +300,37 @@ request_form = dbc.Form([
                 date=datetime.now().date(), )
         ], width={"offset": 2}, id='union_start'),
         dbc.Col([
-            dbc.Label("Bitis Tarihi: ", html_for="union_end_date", style={"font-weight": "bold"}),
+            dbc.Label("End Date: ", html_for="union_end_date", style={"font-weight": "bold"}),
             dcc.DatePickerSingle(
                 id='union_end_date',
                 min_date_allowed=date(1995, 8, 5),
                 max_date_allowed=date(2050, 9, 19),
                 initial_visible_month=datetime.now().date(),
                 clearable=True,
-                placeholder="Suresiz", )
+                placeholder="Indefinite", )
         ], width={"offset": 0}, id='union_end')
     ]),
     html.Hr(),
 
     dbc.Row([
         dbc.Col([
-            dbc.Label("Yabanci Dil Puani", html_for="language", style={"font-weight": "bold"}),
-            dcc.RadioItems(['Var', 'Yok'], 'Yok', inline=True, id='language',
+            dbc.Label("Foreign Language", html_for="language", style={"font-weight": "bold"}),
+            dcc.RadioItems(['Yes', 'No'], 'No', inline=True, id='language',
                            labelStyle={'display': 'block', 'cursor': 'pointer', 'margin-right': '40px'})
         ], width='4'),
         dbc.Col([
-            dbc.Label("Sinav Tarihi: ", html_for="exam_date", style={"font-weight": "bold"}),
+            dbc.Label("Exam Date: ", html_for="exam_date", style={"font-weight": "bold"}),
             dcc.DatePickerSingle(
                 id='exam_date',
                 min_date_allowed=date(1995, 8, 5),
                 max_date_allowed=date(2050, 9, 19),
                 initial_visible_month=datetime.now().date(),
                 clearable=True,
-                placeholder="Sinav Tarihi",
+                placeholder="Exam Date",
                 date=datetime.now().date(), )
         ], width={"offset": 2}, id="lang_date"),
         dbc.Col([
-            dbc.Label("Sinav Puani: ", html_for="exam_score", style={"font-weight": "bold"}),
+            dbc.Label("Score: ", html_for="exam_score", style={"font-weight": "bold"}),
             dbc.Input(type="number", value=0, min=0, max=100, step=0.25, style={'text-align': 'right'},
                       id="exam_score"),
         ], id="lang_score"),
@@ -339,15 +339,15 @@ request_form = dbc.Form([
 
     dbc.Row([
         dbc.Col([
-            dbc.Label("Calisilan Kurum", html_for="request_submission_date", style={"font-weight": "bold"}),
-            dcc.RadioItems(['ILBANK', 'Diger'], 'ILBANK', inline=True, id='corporation',
+            dbc.Label("Working Place", html_for="request_submission_date", style={"font-weight": "bold"}),
+            dcc.RadioItems(['BANK', 'Other'], 'BANK', inline=True, id='corporation',
                            labelStyle={'display': 'block', 'cursor': 'pointer', 'margin-right': '40px'})
         ]),
     ]),
 
     dbc.Row([
         dbc.Col([
-            dbc.Button('Kaydet/Guncelle', id='submit_request', style={'background-color': 'rgb(0, 150, 09)'})
+            dbc.Button('Save/Update', id='submit_request', style={'background-color': 'rgb(0, 150, 09)'})
         ],
             width={'size': 'auto', 'offset': 9})
     ], style={'padding-top': '40px', 'padding-bottom': '40px'})
@@ -424,15 +424,15 @@ def insert_user_inf(sub_click, modal_click, user_id, c_start, experience, title,
                                      "start_date": c_start,
                                      "public_service_time": experience},
                  }
-    if disability_level != "Yok":
+    if disability_level != "None":
         data_dict["disability"] = {"start_date": d_start,
                                    "end_date": d_end,
                                    "level": disability_level}
-    if marriage == "Evli":
+    if marriage == "Married":
         data_dict["partner_working_status"] = {"start_date": p_start,
                                                "end_date": p_end,
                                                "status": partner}
-    if d_children != "Yok":
+    if d_children != "None":
         if int(d_children) >= 1:
             data_dict["dependent_child"] = {"birth_date": birth_date1,
                                             "gender": gender1,
@@ -443,14 +443,14 @@ def insert_user_inf(sub_click, modal_click, user_id, c_start, experience, title,
 
     print(data_dict)
 
-    if union == "Evet":
+    if union == "Yes":
         data_dict["labor_union"] = {"start_date": u_start,
                                     "end_date": u_end}
 
-    if private_ins == "Var":
+    if private_ins == "Yes":
         data_dict["private_insurance"] = {"insurance_date": ins_date,
                                           "total_insurance_payment": ins_total}
-    if language == "Var":
+    if language == "Yes":
         data_dict["language"] = {"exam_date": e_date,
                                  "score": score}
 
@@ -463,14 +463,14 @@ def insert_user_inf(sub_click, modal_click, user_id, c_start, experience, title,
     print(sql_response)
     if sql_response:
         modal_shown = True
-        modal_title = 'Bilgileriniz kaydedilmistir.'
-        modal_text = 'Kullanici bilgileriniz basarili bir sekilde kaydedilmistir/guncellenmistir.'
+        modal_title = 'User information is saved.'
+        modal_text = 'User information is successfully saved/updated.'
         sub_result = True
         return modal_shown, modal_title, modal_text, sub_result
     else:
         modal_shown = True
-        modal_title = 'Bilgileriniz kaydedilememistir!'
-        modal_text = 'Bilgileriniz kaydedilememistir. Lütfen bilgileriniz kontrol ederek tekrar deneyiniz.'
+        modal_title = 'User information can not be successfully saved!'
+        modal_text = 'User information is not saved. Please carefully check your information and try again.'
         sub_result = False
         return modal_shown, modal_title, modal_text, sub_result
 
@@ -535,16 +535,16 @@ def show_user_form(log_click, user_id):
         user = UsersInfo(user_id)
         user_dict = user.select_user_info()
         if not user_dict['corporate_staff']:
-            return style, None, 0, None, None, datetime.now().date(), "Bekar", None, None, None, "Yok", None, None, \
-                   None, None, None, None, None, None, None, None, None, None, "Yok", None, None, "Yok", None, None, \
-                   "Hayir", None, None, "Yok", None, None
+            return style, None, 0, None, None, datetime.now().date(), "Single", None, None, None, "None", None, None, \
+                   None, None, None, None, None, None, None, None, None, None, "No", None, None, "No", None, None, \
+                   "No", None, None, "No", None, None
         else:
             if not user_dict['partner_working_status']:
-                marital_status = "Bekar"
+                marital_status = "Single"
                 working, p_start, p_end = None, None, None
             else:
-                marital_status = "Evli"
-                working = "Calisiyor" if user_dict['partner_working_status'][0][4] == "working" else "Calismiyor"
+                marital_status = "Married"
+                working = "Working" if user_dict['partner_working_status'][0][4] == "working" else "Not Working"
                 p_start = user_dict['partner_working_status'][0][2]
                 p_end = user_dict['partner_working_status'][0][3] if user_dict['partner_working_status'][0][3] else None
 
@@ -553,7 +553,7 @@ def show_user_form(log_click, user_id):
             gender3, birth3, status3, disability3 = None, None, None, None
 
             if not user_dict['dependent_child']:
-                number_of_child = "Yok"
+                number_of_child = "None"
 
             else:
                 number_of_child = len(user_dict['dependent_child'])
@@ -574,7 +574,7 @@ def show_user_form(log_click, user_id):
                                                             user_dict['dependent_child'][2][5]
 
             if not user_dict['disability']:
-                self_disability = "Yok"
+                self_disability = "None"
                 d_start, d_end = None, None
             else:
                 self_disability = user_dict['disability'][0][4]
@@ -582,24 +582,24 @@ def show_user_form(log_click, user_id):
                     user_dict['disability'][0][3] else None
 
             if not user_dict['private_insurance']:
-                insurance = "Yok"
+                insurance = "No"
                 i_start, total_ins = None, None
             else:
-                insurance = "Var"
+                insurance = "Yes"
                 i_start, total_ins = user_dict['private_insurance'][0][2], float(user_dict['private_insurance'][0][3])
 
             if not user_dict['labor_union']:
-                union = "Hayir"
+                union = "No"
                 u_start, u_end = None, None
             else:
-                union = "Evet"
+                union = "Yes"
                 u_start, u_end = user_dict['labor_union'][0][2], user_dict['labor_union'][0][3]
 
             if not user_dict['language']:
-                language = "Yok"
+                language = "No"
                 e_date, e_score = None, None
             else:
-                language = "Var"
+                language = "Yes"
                 e_date, e_score = user_dict['language'][0][2], float(user_dict['language'][0][3])
 
             job_title = user.select_user_title()[0]
@@ -616,9 +616,9 @@ def show_user_form(log_click, user_id):
     Output(component_id='total_cost', component_property='style'),
     [Input(component_id='private_insurance', component_property='value')])
 def show_hide_private_insurance(visibility_state):
-    if visibility_state == 'Var':
+    if visibility_state == 'Yes':
         return {'display': 'flex', 'flex-direction': 'column'}, {'display': 'flex', 'flex-direction': 'column'}
-    if visibility_state == 'Yok':
+    if visibility_state == 'No':
         return {'display': 'none'}, {'display': 'none'}
 
 
@@ -627,9 +627,9 @@ def show_hide_private_insurance(visibility_state):
     Output(component_id='lang_score', component_property='style'),
     [Input(component_id='language', component_property='value')])
 def show_hide_language(visibility_state):
-    if visibility_state == 'Var':
+    if visibility_state == 'Yes':
         return {'display': 'flex', 'flex-direction': 'column'}, {'display': 'flex', 'flex-direction': 'column'}
-    if visibility_state == 'Yok':
+    if visibility_state == 'No':
         return {'display': 'none'}, {'display': 'none'}
 
 
@@ -638,9 +638,9 @@ def show_hide_language(visibility_state):
     Output(component_id='union_end', component_property='style'),
     [Input(component_id='union_membership', component_property='value')])
 def show_hide_union(visibility_state):
-    if visibility_state == 'Evet':
+    if visibility_state == 'Yes':
         return {'display': 'flex', 'flex-direction': 'column'}, {'display': 'flex', 'flex-direction': 'column'}
-    if visibility_state == 'Hayir':
+    if visibility_state == 'No':
         return {'display': 'none'}, {'display': 'none'}
 
 
@@ -649,9 +649,9 @@ def show_hide_union(visibility_state):
     Output(component_id='dis_end', component_property='style'),
     [Input(component_id='disability_level', component_property='value')])
 def show_hide_disability(visibility_state):
-    if visibility_state != 'Yok':
+    if visibility_state != 'None':
         return {'display': 'flex', 'flex-direction': 'column'}, {'display': 'flex', 'flex-direction': 'column'}
-    if visibility_state == 'Yok':
+    if visibility_state == 'None':
         return {'display': 'none'}, {'display': 'none'}
 
 
@@ -659,9 +659,9 @@ def show_hide_disability(visibility_state):
     Output(component_id='partner_status', component_property='style'),
     [Input(component_id='marriage', component_property='value')])
 def show_hide_partner(visibility_state):
-    if visibility_state == 'Evli':
+    if visibility_state == 'Married':
         return {'display': 'flex'}
-    if visibility_state == 'Bekar':
+    if visibility_state == 'Single':
         return {'display': 'none'}
 
 
@@ -671,7 +671,7 @@ def show_hide_partner(visibility_state):
     Output(component_id='child_three_status', component_property='style'),
     [Input(component_id='dependent_children', component_property='value')])
 def show_hide_children(visibility_state):
-    if visibility_state == 'Yok':
+    if visibility_state == 'None':
         return {'display': 'none'}, {'display': 'none'}, {'display': 'none'}
     if visibility_state == '1':
         return {'display': 'flex'}, {'display': 'none'}, {'display': 'none'}

@@ -63,11 +63,12 @@ class UserInfo:
                     compound += 3
                 else:
                     compound += 2
-            elif (self.payroll_date - child[2]).days < 365*25 & child[4] == 'dependent':
+            elif ((self.payroll_date - child[2]).days < 365*25) & (child[4] == 'dependent'):
                 if child[5] == 'yes':
                     compound += 1.5
                 else:
                     compound += 1
+        print("dependent_child_compound", compound)
         self.payroll_user_dict["dependent_child_compound"] = compound
 
     def education_level(self, edu_dict):

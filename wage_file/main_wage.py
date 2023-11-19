@@ -143,6 +143,7 @@ class Wage:
     def family_support(self):
         family_support = 0
         compound = Ade().select_family_support_compound(self.payment_date)[2]
+        print("compound: ", compound)
         if self.payment_type == 'wage_disparity':
             # only pays difference of the two months compounds
             days_in_month = calendar.monthrange(self.year, self.month)[1]
@@ -253,6 +254,7 @@ class Wage:
 
 
 # payroll = Wage(2, 'premium', datetime(2022, 8, 15).date(), cumulative_tax_base=164216)
+
 # print(payroll.user_info_dict)
 # print(payroll.payroll_dict)
 # print('*'*100 + '\n' + '*'*100)

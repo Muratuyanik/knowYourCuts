@@ -15,7 +15,6 @@ from datetime import datetime, date
 
 from payroll import Payroll
 
-df_of_results = pd.DataFrame({})
 saved_payrolls = pd.DataFrame({})
 
 
@@ -32,121 +31,121 @@ payroll_details = dbc.Form([
     dcc.Store(id='calculated_payroll_data'),
     dbc.Row([
         dbc.Col([
-            dbc.Label("BORDRO DETAYLARI", html_for="higher_education", className='h2 secondary'),
+            dbc.Label("Payroll Details", html_for="higher_education", className='h2 secondary'),
         ], className='d-flex justify-content-center secondary')
     ]),
     dbc.Row([
         dbc.Col([
-            dbc.Label("ODEME TARIHI: ", html_for="title_payment_date"),
+            dbc.Label("Payment Date: ", html_for="title_payment_date"),
             html.Output(id="title_payment_date"),
         ], className="col-3"),
         dbc.Col([
-            dbc.Label("ODEME TURU: ", html_for="title_payment_type"),
+            dbc.Label("Payment Type: ", html_for="title_payment_type"),
             html.Output(id="title_payment_type", className='text-uppercase'),
         ]),
         dbc.Col([
-            dbc.Label("KUM VERGI MATRAHI: ", html_for="cumulative_tax_base"),
+            dbc.Label("Cumulative Tax Base: ", html_for="cumulative_tax_base"),
             html.Output(id="cumulative_tax_base"),
         ], className="ms-auto text-end")
     ], className='fw-bold fs-5 d-flex flex-row border border-3 border-primary bg-warning text-info'),
     dbc.Row([
         dbc.Col([
             dbc.Row([
-                dbc.Label("Temel Ucret: ", html_for="base_wage", className='col-9'),
+                dbc.Label("Base Wage: ", html_for="base_wage", className='col-9'),
                 html.Output(id="base_wage", className='col-3 text-end')
             ], className="bg-secondary text-white justify-content-between"),
             dbc.Row([
-                dbc.Label("Ust Ogrenim Tazminati: ", html_for="higher_education", className='col-9'),
+                dbc.Label("Higher Education Compensation: ", html_for="higher_education", className='col-9'),
                 html.Output(id="higher_education", className='col-3 text-end')
             ], className="justify-content-between"),
             dbc.Row([
-                dbc.Label("Kidem Primi: ", html_for="seniority_bonus", className='col-9'),
+                dbc.Label("Seniority Bonus: ", html_for="seniority_bonus", className='col-9'),
                 html.Output(id="seniority_bonus", className='col-3 text-end')
             ], className="bg-secondary text-white justify-content-between"),
             dbc.Row([
-                dbc.Label("Dil Tazminati: ", html_for="language_bonus", className='col-9'),
+                dbc.Label("Language Compensation: ", html_for="language_bonus", className='col-9'),
                 html.Output(id="language_bonus", className='col-3 text-end')
             ], className="justify-content-between"),
             dbc.Row([
-                dbc.Label("Fazla Calisma (Saat): ", html_for="overtime", className='col-9'),
+                dbc.Label("Overtime (Hour): ", html_for="overtime", className='col-9'),
                 html.Output(id="overtime", className='col-3 text-end')
             ], className="bg-secondary text-white justify-content-between"),
             dbc.Row([
-                dbc.Label("Fazla Calisma Ucreti: ", html_for="overtime_pay", className='col-9'),
+                dbc.Label("Overtime Payment: ", html_for="overtime_pay", className='col-9'),
                 html.Output(id="overtime_pay", className='col-3 text-end')
             ], className="justify-content-between"),
             dbc.Row([
-                dbc.Label("Toplu Sozlesme Ucreti: ", html_for="union_bonus", className='col-9'),
+                dbc.Label("Union Bonus: ", html_for="union_bonus", className='col-9'),
                 html.Output(id="union_bonus", className='col-3 text-end')
             ], className="bg-secondary text-white justify-content-between"),
             dbc.Row([
-                dbc.Label("Aile Yardimi: ", html_for="family_support", className='col-9'),
+                dbc.Label("Family Support: ", html_for="family_support", className='col-9'),
                 html.Output(id="family_support", className='col-3 text-end')
             ], className="justify-content-between"),
             dbc.Row([
-                dbc.Label("Brut Maas: ", html_for="gross_wage", className='col-9'),
+                dbc.Label("Gross Wage: ", html_for="gross_wage", className='col-9'),
                 html.Output(id="gross_wage", className='col-3 text-end')
             ], className="fw-bold fs-3 bg-secondary text-white justify-content-between mt-auto"),
         ], className="border border-3 border-primary d-flex flex-column"),
         dbc.Col([
             dbc.Row([
-                dbc.Label("SSK Matrah: ", html_for="social_security_base", className='col-9'),
+                dbc.Label("Social Security Base: ", html_for="social_security_base", className='col-9'),
                 html.Output(id="social_security_base", className='col-3 text-end')
             ], className="bg-secondary text-white justify-content-between"),
             dbc.Row([
-                dbc.Label("SSK Devir: ", html_for="insurance_turnover", className='col-9'),
+                dbc.Label("SS Turnover: ", html_for="insurance_turnover", className='col-9'),
                 html.Output(id="insurance_turnover", className='col-3 text-end')
             ], className="justify-content-between"),
             dbc.Row([
-                dbc.Label("SSK Primi: ", html_for="insurance_premium", className='col-9'),
+                dbc.Label("SS Cut: ", html_for="insurance_premium", className='col-9'),
                 html.Output(id="insurance_premium", className='col-3 text-end')
             ], className="bg-secondary text-white justify-content-between"),
             dbc.Row([
-                dbc.Label("Issizlik Primi: ", html_for="unemployment_premium", className='col-9'),
+                dbc.Label("Unemployment Cut: ", html_for="unemployment_premium", className='col-9'),
                 html.Output(id="unemployment_premium", className='col-3 text-end')
             ], className="justify-content-between"),
             dbc.Row([
-                dbc.Label("Engellilik Vergi Indirimi: ", html_for="disability_discount", className='col-9'),
+                dbc.Label("Disability Discount: ", html_for="disability_discount", className='col-9'),
                 html.Output(id="disability_discount", className='col-3 text-end')
             ], className="bg-secondary text-white justify-content-between"),
             dbc.Row([
-                dbc.Label("Ozel Sigorta Vergi Indirimi: ", html_for="private_insurance_discount", className='col-9'),
+                dbc.Label("Private Insurance Discount: ", html_for="private_insurance_discount", className='col-9'),
                 html.Output(id="private_insurance_discount", className='col-3 text-end')
             ], className="justify-content-between"),
             dbc.Row([
-                dbc.Label("Sendika Vergi Indirimi: ", html_for="union_discount", className='col-9'),
+                dbc.Label("Union Discount: ", html_for="union_discount", className='col-9'),
                 html.Output(id="union_discount", className='col-3 text-end')
             ], className="bg-secondary text-white justify-content-between"),
             dbc.Row([
-                dbc.Label("Toplam Vergi Indirimi: ", html_for="total_tax_discount", className='col-9'),
+                dbc.Label("Total Tax Discount: ", html_for="total_tax_discount", className='col-9'),
                 html.Output(id="total_tax_discount", className='col-3 text-end')
             ], className="justify-content-between"),
             dbc.Row([
-                dbc.Label("Gelir Vergisi Matrahi: ", html_for="income_tax_base", className='col-9'),
+                dbc.Label("Income Tax Base: ", html_for="income_tax_base", className='col-9'),
                 html.Output(id="income_tax_base", className='col-3 text-end')
             ], className="bg-secondary text-white justify-content-between"),
             dbc.Row([
-                dbc.Label("Gelir Vergisi: ", html_for="income_tax", className='col-9'),
+                dbc.Label("Income Tax: ", html_for="income_tax", className='col-9'),
                 html.Output(id="income_tax", className='col-3 text-end')
             ], className="justify-content-between"),
             dbc.Row([
-                dbc.Label("Asgari Ucret Vergi Indirimi: ", html_for="minimum_wage_discount", className='col-9'),
+                dbc.Label("Min Wage Discount: ", html_for="minimum_wage_discount", className='col-9'),
                 html.Output(id="minimum_wage_discount", className='col-3 text-end')
             ], className="bg-secondary text-white justify-content-between"),
             dbc.Row([
-                dbc.Label("Odenecek Gelir Vergisi: ", html_for="tax_to_pay", className='col-9'),
+                dbc.Label("Tax to Pay: ", html_for="tax_to_pay", className='col-9'),
                 html.Output(id="tax_to_pay", className='col-3 text-end')
             ], className="justify-content-between"),
             dbc.Row([
-                dbc.Label("Damga Vergisi: ", html_for="stamp_duty", className='col-9'),
+                dbc.Label("Stump Tax: ", html_for="stamp_duty", className='col-9'),
                 html.Output(id="stamp_duty", className='col-3 text-end')
             ], className="bg-secondary text-white justify-content-between"),
             dbc.Row([
-                dbc.Label("Toplam Yasal Kesintiler: ", html_for="total_legal_cuts", className='col-9'),
+                dbc.Label("Total Legal Cuts: ", html_for="total_legal_cuts", className='col-9'),
                 html.Output(id="total_legal_cuts", className='col-3 text-end')
             ], className="justify-content-between"),
             dbc.Row([
-                dbc.Label("Net Maas: ", html_for="net_income", className='col-9'),
+                dbc.Label("Net Income: ", html_for="net_income", className='col-9'),
                 html.Output(id="net_income", className='col-3 text-end')
             ], className="fw-bold fs-3 bg-secondary text-white justify-content-between mt-auto"),
         ], className="border border-3 border-primary d-flex flex-column"),
@@ -154,13 +153,10 @@ payroll_details = dbc.Form([
 ], style={'padding-top': '30px'}, id="payroll_detail")
 
 payroll_calculation = dbc.Container([
-    dcc.Store(id='current-data'),
-    dcc.Store(id='data-loaded', data=False),
-    dcc.Download(id="download-dataframe-csv"),
     dcc.Store(id='saved_payment', data=False),
     dbc.Row([
         dbc.Col([
-            dbc.Label("Odeme Yapilacak Tarih: ", html_for="payment-date-div"),
+            dbc.Label("Payment Date: ", html_for="payment-date-div"),
             dash.html.Div(
                 dcc.DatePickerSingle(
                     id='payment_date',
@@ -172,70 +168,52 @@ payroll_calculation = dbc.Container([
                 ), id="payment-date-div", className="w-100")
         ], className='col-2'),
         dbc.Col([
-            dbc.Label("Odeme Turu:", html_for="payment_type"),
+            dbc.Label("Payment Type:", html_for="payment_type"),
             dcc.Dropdown(
                 options={
-                    "wage": "Maas",
-                    "premium": "Ikramiye",
-                    "dividend": "Kontrolluk/Temmettu",
-                    "wage_disparity": "Maas Farki"
+                    "wage": "Wage",
+                    "premium": "Premium",
+                    "dividend": "Dividend",
+                    "wage_disparity": "Wage Disparity"
                 }, value="wage", id="payment_type"
             ),
         ], className='col-2'),
         dbc.Col([
-            dbc.Label("Odeme Katsayisi:", html_for="payment_compound"),
+            dbc.Label("Payment Compound:", html_for="payment_compound"),
             dbc.Input(type="number", value=1, min=0, max=100, step=0.01,
                       id="payment_compound"),
         ], id="compound", className='col-2'),
         dbc.Col([
-            dbc.Label("Fazla Calisma(saat):", html_for="overtime_hour"),
+            dbc.Label("Overtime(hour):", html_for="overtime_hour"),
             dbc.Input(type="number", value=0, min=0, max=55, step=1,
                       id="overtime_hour"),
         ], className='col-2', id="overtime_component"),
         dbc.Col([
-            dbc.Button('Hesapla', id='calculate_payroll', className="btn btn-success"),
+            dbc.Button('Calculate', id='calculate_payroll', className="btn btn-success"),
         ], className="align-self-end mb-2 col-1"),
         dbc.Col([
-            dbc.Button('Kaydet', id='save_payroll', className="btn btn-warning"),
+            dbc.Button('Save', id='save_payroll', className="btn btn-warning"),
         ], className="align-self-end mb-2 col-1"),
         dbc.Col([
-            dbc.Button('Guncelle', id='update_payroll', className="btn btn-primary"),
+            dbc.Button('Update', id='update_payroll', className="btn btn-primary"),
         ], className="align-self-end mb-2 col-2")
     ]),
     dbc.Row([
         dbc.Col([
             dcc.Dropdown(
-                options=[], placeholder="Kayitli Odeme Seçiniz.",
+                options=[], placeholder="Choose a saved payment.",
                 multi=False, id="saved_payment_picker"
             )
         ], className='col-2'),
         dbc.Col([
-            dbc.Button('Getir', id='pick_saved_payment_button', color="success")
+            dbc.Button('Get', id='pick_saved_payment_button', color="success")
         ], className="col-1"),
         dbc.Col([
-            dbc.Button('Goster', id='show_saved_payment_button', color="warning")
+            dbc.Button('Show', id='show_saved_payment_button', color="warning")
         ], className="col-2")
     ], className="d-flex", style={'padding-top': '50px'})
 ])
 
-payroll_graph = dbc.Container([
-    dbc.Row([
-        dbc.Col([
-            dcc.Dropdown(
-                options=[], placeholder="Odeme Tarihi Seçiniz.",
-                multi=True, id="result-list-picker"
-            ),
-            html.Br(),
-            dbc.Button('İndir', id='download-raw-data-button', color="success")
-        ], width={"size": 3, "order": "first"}),
-        dbc.Col(
-            dcc.Graph(id='result-graph')
-        ),
-        dbc.Col(
-            dbc.Table([[], []], bordered=True, hover=True, responsive=True, id='result-table')
-        ),
-    ], justify='between', style={'padding-top': '50px'}),
-])
 
 payroll_page = dbc.Container([
     payroll_modals,
@@ -244,9 +222,6 @@ payroll_page = dbc.Container([
     ]),
     dbc.Row([
         payroll_details
-    ]),
-    dbc.Row([
-        payroll_graph
     ]),
 ], style={'padding-top': '20px'})
 
@@ -384,28 +359,6 @@ def show_saved_payments_dates(show_click, user_id, loaded):
         else:
             print("veriler yuklenemedi")
             return None, None
-
-
-@app.callback(
-    Output('download-dataframe-csv', 'data'),
-    Input('download-raw-data-button', 'n_clicks'),
-    State('current-data', 'data'),
-    prevent_initial_call=True
-)
-def hamVeri_indir(click, data):
-    df = pd.DataFrame(data)
-    return dcc.send_data_frame(df.to_csv, "Result_{}.csv".format(int(datetime.now().timestamp())))
-
-
-def normalizeToKS(group):
-    # KS bilgisinin bulundugu deney gruplarinda olcumlerin zaman degerleri KS bolgeleri 0 kabul edilerek bagil degerler
-    # atanacaktir.
-    # KS bilgisinin bulunmadigi deneylerde ise ilk olcum zamani KS sayilacaktir.
-    try:
-        group['zaman'] = group['zaman'] - group[group['aciklama'].str.upper() == 'KS']['zaman'].iloc[0]
-    except:
-        group['zaman'] = group['zaman'] - group['zaman'].min()
-    return group
 
 
 @app.callback(
